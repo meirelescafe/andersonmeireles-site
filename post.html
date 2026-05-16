@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post — Meireles Café</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    :root {
+      --red: #CE0E2D; --green: #00AC69; --yellow: #FFC629;
+      --offwhite: #EAE1EB; --dark: #2D2A26;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: var(--dark); }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(234,225,235,0.92); backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--dark);
+    }
+    .nav-logo { font-family: 'Fredoka', sans-serif; font-size: 1.5rem; font-weight: 600; color: var(--red); text-decoration: none; }
+    .nav-back { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--dark); text-decoration: none; transition: color 0.2s; }
+    .nav-back:hover { color: var(--red); }
+
+    .post-hero {
+      background: var(--dark); padding: 80px 80px 60px;
+      border-bottom: 3px solid var(--red);
+    }
+    .post-hero .tag { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: var(--yellow); margin-bottom: 16px; display: block; }
+    .post-hero h1 { font-family: 'Fredoka', sans-serif; font-size: clamp(36px, 5vw, 72px); color: var(--offwhite); line-height: 1.1; margin-bottom: 20px; }
+    .post-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .post-date-meta { font-size: 0.85rem; color: rgba(234,225,235,0.45); }
+    .post-tags-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+    .post-tag { background: rgba(255,255,255,0.07); color: rgba(234,225,235,0.5); padding: 4px 12px; border-radius: 100px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+    .post-thumb-full { width: 100%; max-height: 480px; object-fit: cover; display: block; }
+
+    .post-content-wrap { max-width: 720px; margin: 0 auto; padding: 72px 40px; }
+    .post-content { font-size: 1.05rem; line-height: 1.9; color: #3a3631; }
+    .post-content h2 { font-family: 'Fredoka', sans-serif; font-size: 1.8rem; color: var(--dark); margin: 48px 0 16px; }
+    .post-content h3 { font-family: 'Fredoka', sans-serif; font-size: 1.3rem; color: var(--dark); margin: 32px 0 12px; }
+    .post-content p { margin-bottom: 24px; }
+    .post-content strong { color: var(--dark); font-weight: 700; }
+    .post-content em { font-style: italic; }
+    .post-content ul, .post-content ol { padding-left: 24px; margin-bottom: 24px; }
+    .post-content li { margin-bottom: 8px; line-height: 1.7; }
+    .post-content blockquote { border-left: 4px solid var(--red); padding: 16px 24px; margin: 32px 0; background: rgba(206,14,45,0.05); border-radius: 0 12px 12px 0; font-style: italic; color: #555; }
+    .post-content a { color: var(--red); text-decoration: underline; }
+    .post-content img { width: 100%; border-radius: 12px; margin: 32px 0; }
+    .post-content hr { border: none; border-top: 2px solid rgba(45,42,38,0.1); margin: 48px 0; }
+
+    .post-back { margin-top: 64px; padding-top: 40px; border-top: 2px solid rgba(45,42,38,0.1); text-align: center; }
+    .post-back a { display: inline-block; background: var(--red); color: #fff; padding: 16px 36px; border-radius: 100px; font-family: 'Fredoka', sans-serif; font-size: 1.05rem; text-decoration: none; transition: background 0.2s; }
+    .post-back a:hover { background: var(--green); }
+
+    footer { background: #1a1714; border-top: 2px solid rgba(255,255,255,0.06); padding: 32px 80px; text-align: center; }
+    footer p { font-size: 0.8rem; color: rgba(255,255,255,0.2); }
+
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .post-hero { padding: 60px 32px 48px; }
+      .post-content-wrap { padding: 48px 24px; }
+      footer { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">Meireles café</a>
+    <a href="/blog.html" class="nav-back">← Todos os posts</a>
+  </nav>
+
+  <div id="postContainer">
+    <div class="post-hero">
+      <span class="tag" id="postTag">Blog</span>
+      <h1 id="postTitle">Carregando...</h1>
+      <div class="post-meta">
+        <span class="post-date-meta" id="postDate"></span>
+        <div class="post-tags-meta" id="postTags"></div>
+      </div>
+    </div>
+    <img id="postThumb" class="post-thumb-full" style="display:none" />
+    <div class="post-content-wrap">
+      <div class="post-content" id="postContent"></div>
+      <div class="post-back">
+        <a href="/blog.html">← Ver todos os posts</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Meireles Café · Consultoria, Educação e Cafés Especiais</p>
+  </footer>
+
+  <script>
+    async function loadPost() {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug');
+      if (!slug) { window.location = '/blog.html'; return; }
+
+      try {
+        const res = await fetch(`/posts/${slug}.md`);
+        if (!res.ok) throw new Error('Post not found');
+        const raw = await res.text();
+
+        // Parse frontmatter
+        const fm = {};
+        let body = raw;
+        const fmMatch = raw.match(/^---\n([\s\S]+?)\n---\n([\s\S]*)$/);
+        if (fmMatch) {
+          fmMatch[1].split('\n').forEach(line => {
+            const [key, ...val] = line.split(':');
+            if (key && val.length) {
+              let v = val.join(':').trim().replace(/^"|"$/g, '');
+              if (v.startsWith('[')) {
+                try { fm[key.trim()] = JSON.parse(v); } catch { fm[key.trim()] = v; }
+              } else {
+                fm[key.trim()] = v;
+              }
+            }
+          });
+          body = fmMatch[2];
+        }
+
+        // Set page title
+        document.title = `${fm.title || 'Post'} — Meireles Café`;
+        document.getElementById('postTitle').textContent = fm.title || '';
+
+        // Date
+        if (fm.date) {
+          const d = new Date(fm.date);
+          document.getElementById('postDate').textContent = d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+        }
+
+        // Tags
+        const tags = Array.isArray(fm.tags) ? fm.tags : (fm.tags ? [fm.tags] : []);
+        document.getElementById('postTags').innerHTML = tags.map(t => `<span class="post-tag">${t}</span>`).join('');
+
+        // Thumbnail
+        if (fm.thumbnail) {
+          const thumb = document.getElementById('postThumb');
+          thumb.src = fm.thumbnail;
+          thumb.alt = fm.title;
+          thumb.style.display = 'block';
+        }
+
+        // Content
+        document.getElementById('postContent').innerHTML = marked.parse(body);
+
+      } catch(e) {
+        document.getElementById('postTitle').textContent = 'Post não encontrado';
+        document.getElementById('postContent').innerHTML = '<p>Este post não foi encontrado. <a href="/blog.html">Ver todos os posts →</a></p>';
+      }
+    }
+    loadPost();
+  </script>
+</body>
+</html>
